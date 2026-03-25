@@ -1,0 +1,633 @@
+// ===== Variables =====
+$bg-dark: #11111b;
+$bg-surface: #1e1e2e;
+$bg-overlay: #313244;
+$text-primary: #cdd6f4;
+$text-secondary: #a6adc8;
+$text-muted: #6c7086;
+$accent: #cba6f7;
+$accent-hover: #b4befe;
+$green: #a6e3a1;
+$red: #f38ba8;
+$yellow: #f9e2af;
+$border: #45475a;
+$radius: 8px;
+
+// ===== Reset =====
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: $bg-dark;
+  color: $text-primary;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+// ===== App Layout =====
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: $bg-surface;
+    border-bottom: 1px solid $border;
+    flex-shrink: 0;
+
+    @media (max-width: 768px) {
+      padding: 10px 12px;
+    }
+  }
+
+  &__header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    @media (max-width: 768px) {
+      gap: 8px;
+    }
+  }
+
+  &__header-right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__menu-btn {
+    display: none;
+    background: none;
+    border: 1px solid $border;
+    color: $text-primary;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    line-height: 1;
+
+    &:hover {
+      background: $bg-overlay;
+    }
+
+    @media (max-width: 768px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $accent;
+    letter-spacing: -0.02em;
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
+  }
+
+  &__badge {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: $bg-overlay;
+    color: $text-secondary;
+
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+
+  &__progress {
+    position: relative;
+    width: 200px;
+    height: 24px;
+    background: $bg-overlay;
+    border-radius: 12px;
+    overflow: hidden;
+
+    @media (max-width: 480px) {
+      width: 100px;
+      height: 20px;
+    }
+  }
+
+  &__progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, $accent, $green);
+    border-radius: 12px;
+    transition: width 0.4s ease;
+  }
+
+  &__progress-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__overlay {
+    display: none;
+
+    @media (max-width: 768px) {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10;
+    }
+  }
+
+  &__sidebar {
+    width: 260px;
+    background: $bg-surface;
+    border-right: 1px solid $border;
+    overflow-y: auto;
+    flex-shrink: 0;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: $border;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 20;
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+      box-shadow: none;
+
+      &--open {
+        transform: translateX(0);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+
+  &__main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: $border;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      padding: 12px;
+      gap: 12px;
+    }
+  }
+}
+
+// ===== Challenge Header =====
+.challenge-header {
+  background: $bg-surface;
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: 20px;
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  &__category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $accent;
+    background: rgba($accent, 0.1);
+    padding: 2px 10px;
+    border-radius: 12px;
+  }
+
+  &__number {
+    font-size: 0.8rem;
+    color: $text-muted;
+  }
+
+  &__title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  &__desc {
+    color: $text-secondary;
+    font-size: 0.9rem;
+    line-height: 1.7;
+
+    code {
+      background: $bg-overlay;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      color: $accent;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  &__nav {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+
+    @media (max-width: 480px) {
+      margin-left: 0;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  &__hint {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: rgba($yellow, 0.08);
+    border: 1px solid rgba($yellow, 0.2);
+    border-radius: $radius;
+    color: $yellow;
+    font-size: 0.85rem;
+    font-family: 'Fira Code', monospace;
+  }
+}
+
+// ===== Buttons =====
+.btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &--primary {
+    background: $accent;
+    color: $bg-dark;
+
+    &:hover:not(:disabled) {
+      background: $accent-hover;
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $text-secondary;
+    border: 1px solid $border;
+
+    &:hover:not(:disabled) {
+      background: $bg-overlay;
+      color: $text-primary;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+// ===== Challenge Grid =====
+.challenge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+
+  &__editor {
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
+    min-height: 250px;
+  }
+
+  &__preview {
+    grid-row: 1 / 2;
+    grid-column: 2 / 3;
+    min-height: 250px;
+  }
+
+  &__output {
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+  }
+
+  &__expected {
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+
+    &__editor,
+    &__preview,
+    &__output,
+    &__expected {
+      grid-row: auto;
+      grid-column: 1 / -1;
+      min-height: 220px;
+    }
+  }
+}
+
+// ===== Panel =====
+.panel {
+  background: $bg-surface;
+  border: 1px solid $border;
+  border-radius: $radius;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: $bg-overlay;
+    border-bottom: 1px solid $border;
+    flex-shrink: 0;
+  }
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+
+    &--red { background: $red; }
+    &--yellow { background: $yellow; }
+    &--green { background: $green; }
+  }
+
+  &__title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $text-muted;
+    margin-left: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__badge {
+    margin-left: auto;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+
+    &--success {
+      background: rgba($green, 0.15);
+      color: $green;
+    }
+
+    &--error {
+      background: rgba($red, 0.15);
+      color: $red;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow: auto;
+
+    &--code {
+      padding: 14px;
+    }
+  }
+}
+
+// ===== Code Editor =====
+.code-editor {
+  height: 100%;
+
+  .cm-editor {
+    height: 100%;
+    font-size: 13px;
+  }
+
+  .cm-scroller {
+    font-family: 'Fira Code', 'Cascadia Code', monospace;
+  }
+}
+
+// ===== CSS Output =====
+.css-output {
+  font-family: 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.8rem;
+  color: $text-secondary;
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+
+.error-output {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: $red;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+// ===== Visual Preview =====
+.visual-preview {
+  height: 100%;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: $bg-dark;
+  }
+}
+
+// ===== Level Selector =====
+.level-selector {
+  padding: 12px 0;
+
+  &__group {
+    margin-bottom: 4px;
+  }
+
+  &__category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $text-muted;
+    padding: 8px 16px 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__check {
+    color: $green;
+    font-size: 0.75rem;
+  }
+
+  &__item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 16px;
+    background: transparent;
+    border: none;
+    color: $text-secondary;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-align: left;
+
+    &:hover {
+      background: $bg-overlay;
+      color: $text-primary;
+    }
+
+    &--active {
+      background: rgba($accent, 0.1);
+      color: $accent;
+      border-left: 2px solid $accent;
+    }
+
+    &--done {
+      color: $text-muted;
+    }
+  }
+
+  &__num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: $bg-overlay;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    flex: 1;
+  }
+
+  &__done-icon {
+    color: $green;
+    font-size: 0.75rem;
+  }
+}
+
+// ===== Blocked Banner =====
+.blocked-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: rgba($red, 0.08);
+  border: 1px solid rgba($red, 0.25);
+  border-radius: $radius;
+  color: $red;
+  font-size: 0.85rem;
+  font-weight: 500;
+  animation: slideUp 0.3s ease;
+
+  &__icon {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba($red, 0.2);
+    font-weight: 700;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+}
+
+// ===== Success Banner =====
+.success-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: rgba($green, 0.08);
+  border: 1px solid rgba($green, 0.2);
+  border-radius: $radius;
+  color: $green;
+  font-weight: 600;
+  animation: slideUp 0.3s ease;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
